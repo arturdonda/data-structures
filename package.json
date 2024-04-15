@@ -1,0 +1,14 @@
+{
+	"name": "data-structures",
+	"version": "1.0.2",
+	"main": "index.js",
+	"scripts": {
+		"precommit": "npm version %npm_config_bump% --no-git-tag-version && git pull && git add package*.json",
+		"commit": "git commit",
+		"postcommit": "git push"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"description": ""
+}
