@@ -1,6 +1,6 @@
 {
 	"name": "data-structures",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"main": "index.js",
 	"scripts": {
 		"precommit": "npm version %npm_config_bump% --no-git-tag-version && git pull && git add package*.json",
@@ -10,5 +10,9 @@
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
-	"description": ""
+	"description": "",
+	"devDependencies": {
+		"@types/node": "^20.12.7",
+		"typescript": "^5.4.5"
+	}
 }
