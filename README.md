@@ -16,10 +16,26 @@ Data structures and algorithms (DSA) go hand in hand. A data structure is not wo
 
 ## Classification
 
-Data Structures are usually classified into two categories:
+### Data Structures
 
 - [**Linear Data Structures**](/src/linear): elements are arranged in one dimension (for example lists, stack, queue)
+  - **Arrays**: Basic storage structure for elements of the same type.
+  - **Linked Lists**: Linear data structures consisting of nodes.
+  - **Stacks**: LIFO (Last-In, First-Out) data structures.
+  - **Queues**: FIFO (First-In, First-Out) data structures.
 - [**Non-Linear Data Structures**](/src/non-linear): elements are arranged in one-many, many-one and many-many dimensions (for example tree, graph, table)
+  - **Trees**: Hierarchical data structures with nodes.
+  - **Graphs**: Non-linear data structures composed of nodes and edges.
+  - **Hash Tables**: Data structures that implement associative arrays or mappings.
+
+### Algorithms
+
+- **Searching Algorithms**: Techniques for finding an element or group of elements in a collection.
+- **Sorting Algorithms**: Techniques for arranging elements in a specific order.
+- **Graph Algorithms**: Algorithms for traversing or manipulating graphs.
+- **String Algorithms**: Techniques for processing and manipulating strings.
+- **Dynamic Programming**: Optimization method for solving complex problems by breaking them down into simpler subproblems.
+- **Greedy Algorithms**: Optimization method that makes the locally optimal choice at each stage with the hope of finding a global optimum.
 
 ## References
 
