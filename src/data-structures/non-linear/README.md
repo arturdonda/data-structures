@@ -4,10 +4,10 @@ Non-linear data structures are arrangements of data elements where each element 
 
 non-linear data structures are:
 
-- **[Graph](/src/non-linear/graph/)**: Non-linear data structures consisting of nodes (vertices) and edges, where each edge connects two vertices. Graphs are versatile structures usually used to model networks.
-- **[Hash Table](/src/non-linear/hash-table/)**: Hash tables are data structures that implement associative arrays or mappings, where data elements are stored in an array and accessed using keys. Hash tables offer constant-time average case complexity for insertions, deletions, and lookups, making them efficient for storing and retrieving data.
-- **[Heap](/src/non-linear/heap/)**: Heaps are specialized tree-based data structures that satisfy the heap property, where each parent node is either greater than or less than its child nodes. Heaps are commonly used in priority queues and sorting algorithms such as heap sort.
-- **[Tree](/src/non-linear/tree/)**: Hierarchical data structures composed of nodes, where each node has a parent-child relationship with other nodes. Trees are widely used for organizing hierarchical data such as file systems, organizational charts, and XML/HTML documents.
+- **[Graph](./graph/)**: Non-linear data structures consisting of nodes (vertices) and edges, where each edge connects two vertices. Graphs are versatile structures usually used to model networks.
+- **[Hash Table](./hash-table/)**: Hash tables are data structures that implement associative arrays or mappings, where data elements are stored in an array and accessed using keys. Hash tables offer constant-time average case complexity for insertions, deletions, and lookups, making them efficient for storing and retrieving data.
+- **[Heap](./heap/)**: Heaps are specialized tree-based data structures that satisfy the heap property, where each parent node is either greater than or less than its child nodes. Heaps are commonly used in priority queues and sorting algorithms such as heap sort.
+- **[Tree](./tree/)**: Hierarchical data structures composed of nodes, where each node has a parent-child relationship with other nodes. Trees are widely used for organizing hierarchical data such as file systems, organizational charts, and XML/HTML documents.
 
 ## Usage
 

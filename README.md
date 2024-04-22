@@ -18,12 +18,12 @@ Data structures and algorithms (DSA) go hand in hand. A data structure is not wo
 
 ### Data Structures
 
-- [**Linear Data Structures**](/src/linear): elements are arranged in one dimension
+- [**Linear Data Structures**](/src/data-structures/linear/): elements are arranged in one dimension
   - **Arrays**: Stores elements of the same type in contiguous memory locations.
   - **Linked Lists**: Collections of nodes, where each node contains a data element and a reference to the next node in the sequence.
   - **Queues**: FIFO (First-In, First-Out) data structures.
   - **Stacks**: LIFO (Last-In, First-Out) data structures.
-- [**Non-Linear Data Structures**](/src/non-linear): elements are arranged in one-many, many-one and many-many dimensions
+- [**Non-Linear Data Structures**](/src/data-structures/non-linear): elements are arranged in one-many, many-one and many-many dimensions
   - **Graphs**: Non-linear data structures composed of nodes and edges.
   - **Hash Tables**: Data structures that implement associative arrays or mappings.
   - **Heaps**: Specialized tree-based data structures that satisfy the heap property.

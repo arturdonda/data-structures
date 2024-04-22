@@ -4,10 +4,10 @@ Linear data structures are arrangements of data elements where each element is c
 
 Linear data structures are:
 
-- **[Array](/src/linear/array/)**: Arrays are a fundamental data structure that stores elements of the same type in contiguous memory locations. They offer constant-time access to elements using their index positions, making them efficient for random access operations.
-- **[Linked List](/src/linear/linked-list/)**: Linked lists are collections of nodes, where each node contains a data element and a reference (or pointer) to the next node in the sequence. They offer dynamic memory allocation and efficient insertion and deletion operations, but access time to elements is linear.
-- **[Queue](/src/linear/queue/)**: First-In, First-Out (FIFO) data structures that support two main operations: enqueue (adding an element to the rear) and dequeue (removing the front element).
-- **[Stack](/src/linear/stack/)**: Last-In, First-Out (LIFO) data structures that support two main operations: push (inserting an element) and pop (removing the top element).
+- **[Array](./array/)**: Arrays are a fundamental data structure that stores elements of the same type in contiguous memory locations. They offer constant-time access to elements using their index positions, making them efficient for random access operations.
+- **[Linked List](./linked-list/)**: Linked lists are collections of nodes, where each node contains a data element and a reference (or pointer) to the next node in the sequence. They offer dynamic memory allocation and efficient insertion and deletion operations, but access time to elements is linear.
+- **[Queue](./queue/)**: First-In, First-Out (FIFO) data structures that support two main operations: enqueue (adding an element to the rear) and dequeue (removing the front element).
+- **[Stack](./stack/)**: Last-In, First-Out (LIFO) data structures that support two main operations: push (inserting an element) and pop (removing the top element).
 
 ## Usage
 
