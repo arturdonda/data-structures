@@ -34,8 +34,8 @@ Arrays are fundamental data structures used to store elements of the same type i
 | --------- | ------- | ---------- |
 | Access    | O(1)    | O(1)       |
 | Search    | O(n)    | O(n)       |
-| Insertion | O(n)    | O(n)       |
-| Deletion  | O(n)    | O(n)       |
+| Insert    | O(n)    | O(n)       |
+| Delete    | O(n)    | O(n)       |
 
 ## Use Cases
 
