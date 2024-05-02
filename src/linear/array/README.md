@@ -9,28 +9,24 @@ Arrays are fundamental data structures used to store elements of the same type i
 - **Contiguous Memory Allocation**: Array elements are stored in adjacent memory locations, enabling efficient random access to elements using their indices. This contiguous memory allocation also facilitates efficient traversal and manipulation of array elements.
 - **Zero-based Indexing**: Most programming languages use zero-based indexing for arrays, meaning the index of the first element is 0, the index of the second element is 1, and so on.
 
+## Advantages
+
+- **Efficient Random Access**: Arrays provide constant-time access to elements based on their indices, making them ideal for scenarios where quick access to individual elements is required.
+- **Memory Efficiency**: Arrays allocate contiguous memory blocks, leading to efficient memory utilization compared to some other data structures.
+- **Simplicity**: Arrays are simple and easy to understand, making them suitable for a wide range of applications and programming tasks.
+
+## Disadvantages
+
+- **Fixed Size**: Arrays have a fixed size, making it challenging to accommodate dynamic changes in the number of elements. Resizing an array often involves creating a new array with a different size and copying elements, resulting in additional overhead.
+- **Inefficient Insertion and Deletion**: Insertion and deletion operations in arrays can be inefficient, especially when elements need to be added or removed from the middle of the array, as it may require shifting elements.
+- **Memory Wastage**: Arrays allocate memory for the maximum number of elements they can hold, even if the actual number of elements is smaller, leading to potential memory wastage.
+
 ## Operations
 
 - **Access**: Arrays support efficient random access to elements based on their indices. Accessing an element of an array has constant time complexity **O(1)** because the memory address of the element can be calculated using its index.
 - **Insertion**: Inserting an element into an array can be **O(n)** in the worst case, as it may require shifting subsequent elements to accommodate the new element.
 - **Deletion**: Deleting an element from an array can also be **O(n)** in the worst case, as it may require shifting elements after the deleted element.
 - **Update**: Elements in an array can be updated in constant time **O(1)** by directly accessing them using their index.
-
-## Advantages
-
-1. **Efficient Random Access**: Arrays provide constant-time access to elements based on their indices, making them ideal for scenarios where quick access to individual elements is required.
-
-2. **Memory Efficiency**: Arrays allocate contiguous memory blocks, leading to efficient memory utilization compared to some other data structures.
-
-3. **Simplicity**: Arrays are simple and easy to understand, making them suitable for a wide range of applications and programming tasks.
-
-## Limitations
-
-1. **Fixed Size**: Arrays have a fixed size, making it challenging to accommodate dynamic changes in the number of elements. Resizing an array often involves creating a new array with a different size and copying elements, resulting in additional overhead.
-
-2. **Inefficient Insertion and Deletion**: Insertion and deletion operations in arrays can be inefficient, especially when elements need to be added or removed from the middle of the array, as it may require shifting elements.
-
-3. **Memory Wastage**: Arrays allocate memory for the maximum number of elements they can hold, even if the actual number of elements is smaller, leading to potential memory wastage.
 
 ## Use Cases
 
