@@ -21,19 +21,27 @@ Arrays are fundamental data structures used to store elements of the same type i
 - **Inefficient Insertion and Deletion**: Insertion and deletion operations in arrays can be inefficient, especially when elements need to be added or removed from the middle of the array, as it may require shifting elements.
 - **Memory Wastage**: Arrays allocate memory for the maximum number of elements they can hold, even if the actual number of elements is smaller, leading to potential memory wastage.
 
-## Operations
+## Common Operations
 
 - **Access**: Arrays support efficient random access to elements based on their indices. Accessing an element of an array has constant time complexity **O(1)** because the memory address of the element can be calculated using its index.
 - **Insertion**: Inserting an element into an array can be **O(n)** in the worst case, as it may require shifting subsequent elements to accommodate the new element.
 - **Deletion**: Deleting an element from an array can also be **O(n)** in the worst case, as it may require shifting elements after the deleted element.
 - **Update**: Elements in an array can be updated in constant time **O(1)** by directly accessing them using their index.
 
+## Time Complexity
+
+| Operation | Average | Worst Case |
+| --------- | ------- | ---------- |
+| Access    | O(1)    | O(1)       |
+| Search    | O(n)    | O(n)       |
+| Insertion | O(n)    | O(n)       |
+| Deletion  | O(n)    | O(n)       |
+
 ## Use Cases
 
-- **Efficient Access**: Arrays are commonly used in scenarios where fast access to elements is crucial, such as **lookup tables**, implementing other data structures like **stacks** and **queues**, and for **caching** frequently accessed data.
-- **Sequential Data Storage**: When dealing with data that needs to be accessed sequentially, like **processing sensor data**, **reading from files**, or **storing historical records**, arrays can be a suitable choice due to their contiguous memory allocation and efficient sequential access.
-- **Numerical Computations**: Arrays are extensively used in numerical computations and scientific computing for **storing vectors**, **matrices**, and **multidimensional data structures**, providing efficient access to elements for mathematical operations.
-- **Implementation of Algorithms**: Many algorithms, such as **sorting and searching algorithms**, utilize arrays due to their fast access time and simplicity, making them a fundamental building block in algorithm design and implementation.
+- **Data Storage**: Arrays are commonly used for storing collections of data of the same type, such as a list of numbers, characters, or objects.
+- **Mathematical Operations**: Arrays are used in mathematical operations, such as matrix multiplication and vector operations.
+- **Lookup Tables**: Arrays are often used as lookup tables or for implementing associative arrays, where each element's index represents a key or identifier.
 
 ## Considerations
 
