@@ -1,26 +1,31 @@
+import { LinkedList } from '../../linked-list/classes';
 import { StackProtocol } from '../interfaces';
 
 export class Stack<T> implements StackProtocol<T> {
-	private readonly data: T[];
+	private readonly data: LinkedList<T>;
 
 	constructor() {
-		this.data = [];
+		this.data = new LinkedList<T>();
 	}
 
 	push(item: T): void {
-		this.data.push(item);
+		this.data.insert(item, 'end');
 	}
 
 	pop(): T | undefined {
-		return this.data.pop();
+		const tail = this.data.peek('end');
+
+		this.data.delete('end');
+
+		return tail;
 	}
 
 	peek(): T | undefined {
-		return this.data[0];
+		return this.data.peek('end');
 	}
 
 	get size(): number {
-		return this.data.length;
+		return this.data.size;
 	}
 
 	isEmpty(): boolean {
