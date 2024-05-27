@@ -1,26 +1,31 @@
+import { LinkedList } from '../../linked-list/classes';
 import { QueueProtocol } from '../interfaces';
 
 export class Queue<T> implements QueueProtocol<T> {
-	private readonly data: T[];
+	private readonly data: LinkedList<T>;
 
 	constructor() {
-		this.data = [];
+		this.data = new LinkedList<T>();
 	}
 
 	enqueue(item: T): void {
-		this.data.push(item);
+		this.data.insert(item, 'end');
 	}
 
 	dequeue(): T | undefined {
-		return this.data.shift();
+		const head = this.peek();
+
+		this.data.delete('start');
+
+		return head;
 	}
 
 	peek(): T | undefined {
-		return this.data[0];
+		return this.data.peek('start');
 	}
 
 	get size(): number {
-		return this.data.length;
+		return this.data.size;
 	}
 
 	isEmpty(): boolean {
