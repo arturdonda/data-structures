@@ -1,5 +1,6 @@
 export abstract class LinkedListProtocol<T> {
 	abstract get size(): number;
+	abstract peek: (position?: LinkedListProtocol.Position) => T | undefined;
 	abstract insert: (data: T, position?: LinkedListProtocol.Position) => void;
 	abstract delete: (position?: LinkedListProtocol.Position) => void;
 	abstract find: (filterFunction: LinkedListProtocol.FilterFunction<T>) => T | undefined;

@@ -14,6 +14,12 @@ export class LinkedList<T> implements LinkedListProtocol<T> {
 		return this.length;
 	}
 
+	peek(position?: LinkedListProtocol.Position | undefined): T | undefined {
+		if (this.length === 0) return;
+
+		return (position === 'end' ? this.tail : this.head)!.data;
+	}
+
 	insert(data: T, position: LinkedListProtocol.Position = 'end'): void {
 		const newNode = new LinkedNode(data);
 
