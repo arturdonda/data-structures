@@ -24,19 +24,19 @@ Data structures and algorithms (DSA) go hand in hand. A data structure is not wo
   - **Queues**: FIFO (First-In, First-Out) data structures.
   - **Stacks**: LIFO (Last-In, First-Out) data structures.
 - [**Non-Linear Data Structures**](/src/data-structures/non-linear): elements are arranged in one-many, many-one and many-many dimensions
+  - **Trees**: Hierarchical data structures with nodes.
+  - **Heaps**: Specialized tree-based data structures that satisfy the heap property.
   - **Graphs**: Non-linear data structures composed of nodes and edges.
   - **Hash Tables**: Data structures that implement associative arrays or mappings.
-  - **Heaps**: Specialized tree-based data structures that satisfy the heap property.
-  - **Trees**: Hierarchical data structures with nodes.
 
 ### Algorithms
 
-- **Searching Algorithms**: Techniques for finding an element or group of elements in a collection.
 - **Sorting Algorithms**: Techniques for arranging elements in a specific order.
-- **Graph Algorithms**: Algorithms for traversing or manipulating graphs.
-- **String Algorithms**: Techniques for processing and manipulating strings.
+- **Searching Algorithms**: Techniques for finding an element or group of elements in a collection.
 - **Dynamic Programming**: Optimization method for solving complex problems by breaking them down into simpler subproblems.
 - **Greedy Algorithms**: Optimization method that makes the locally optimal choice at each stage with the hope of finding a global optimum.
+- **Graph Algorithms**: Algorithms for traversing or manipulating graphs.
+- **String Algorithms**: Techniques for processing and manipulating strings.
 
 ## References
 
