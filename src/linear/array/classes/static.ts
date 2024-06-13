@@ -4,7 +4,7 @@ export class StaticArray<T> implements ArrayProtocol<T> {
 	private data: T[];
 
 	constructor(private readonly size: number) {
-		this.data = new Array<T>(size);
+		this.data = new Array<T>();
 	}
 
 	get length() {
@@ -12,16 +12,32 @@ export class StaticArray<T> implements ArrayProtocol<T> {
 	}
 
 	get(index: number) {
-		if (index < 0) throw new Error(`Out of bound: index must be between 0 and ${this.size - 1}`);
+		this.validateIndex(index);
 
 		return this.data[index];
 	}
 
-	set(index: number, value: T) {
-		if (index < 0 || index >= this.size) throw new Error(`Out of bound: index must be between 0 and ${this.size - 1}`);
+	insert(value: T, index: number = this.length) {
+		if (this.length >= this.size) throw new Error('Overflow: array is full');
+
+		this.validateIndex(index);
 
 		this.data[index] = value;
 	}
+
+	delete(index: number) {
+		this.validateIndex(index);
+
+		this.data.splice(index, 1);
+	}
+
+	//#region Validation
+	private validateIndex(index: number) {
+		if (index >= 0 && index < this.size) return;
+
+		throw new Error(`Out of Bound: index must be between 0 and ${this.size - 1}`);
+	}
+	//#endregion Validation
 
 	//#region Print
 	toString() {
@@ -32,7 +48,7 @@ export class StaticArray<T> implements ArrayProtocol<T> {
 		return this.data;
 	}
 
-	[Symbol.for('nodejs.util.inspect.custom')](depth: any, inspectOptions: any, inspect: any) {
+	[Symbol.for('nodejs.util.inspect.custom')]() {
 		return this.data;
 	}
 	//#endregion Print
@@ -42,7 +58,7 @@ export class StaticArray<T> implements ArrayProtocol<T> {
 		let index = 0;
 
 		return {
-			next: () => ({ done: index >= this.data.length, value: this.data[index++] }),
+			next: () => ({ done: index >= this.length, value: this.data[index++] }),
 		};
 	}
 	//#endregion Iterator

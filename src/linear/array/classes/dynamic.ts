@@ -2,30 +2,41 @@ import { ArrayProtocol } from '../interfaces/array';
 import { StaticArray } from './static';
 
 export class DynamicArray<T> implements ArrayProtocol<T> {
+	private size = 4;
 	private data: StaticArray<T>;
 
-	constructor(private size: number = 4) {
+	constructor() {
 		this.data = new StaticArray<T>(this.size);
 	}
 
 	get length() {
-		return [...this.data].filter(x => typeof x !== 'undefined').length;
+		return this.data.length;
 	}
 
 	get(index: number) {
-		return this.data.get(index);
+		try {
+			return this.data.get(index);
+		} catch (error) {
+			console.log('Trying to get out of bound item... Index = ', index);
+
+			return undefined;
+		}
 	}
 
-	set(index: number, value: T) {
+	insert(value: T, index?: number) {
 		try {
-			this.data.set(index, value);
+			this.data.insert(value, index);
 		} catch (error) {
 			console.log('Static array size limit reached!');
 
 			this.relocate();
 
-			this.set(index, value);
+			this.insert(value, index);
 		}
+	}
+
+	delete(index: number) {
+		return this.data.delete(index);
 	}
 
 	private relocate() {
@@ -35,8 +46,8 @@ export class DynamicArray<T> implements ArrayProtocol<T> {
 
 		const newData = new StaticArray<T>(this.size);
 
-		for (let i = 0; i < this.data.length; i++) {
-			newData.set(i, this.data.get(i));
+		for (const item of this.data) {
+			newData.insert(item);
 		}
 
 		this.data = newData;
@@ -53,7 +64,7 @@ export class DynamicArray<T> implements ArrayProtocol<T> {
 		return this.data;
 	}
 
-	[Symbol.for('nodejs.util.inspect.custom')](depth: any, inspectOptions: any, inspect: any) {
+	[Symbol.for('nodejs.util.inspect.custom')]() {
 		return this.data;
 	}
 	//#endregion Print
@@ -63,7 +74,7 @@ export class DynamicArray<T> implements ArrayProtocol<T> {
 		let index = 0;
 
 		return {
-			next: () => ({ done: index >= this.data.length, value: this.data.get(index++) }),
+			next: () => ({ done: index >= this.length, value: this.data.get(index++) }),
 		};
 	}
 	//#endregion Iterator
