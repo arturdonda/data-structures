@@ -28,13 +28,13 @@ export class LinkedList<T> {
 	}
 
 	// O(n)
-	indexOf(filterFunction: LinkedList.FilterFunction<T>): number {
+	indexOf(findFunction: LinkedList.FindFunction<T>): number {
 		let index = -1;
 
 		for (let node = this.head; node !== null; node = node.next) {
 			index++;
 
-			if (filterFunction(node.data)) return index;
+			if (findFunction(node.data)) return index;
 		}
 
 		return -1;
@@ -77,31 +77,58 @@ export class LinkedList<T> {
 	}
 
 	// O(1) if head or tail and O(n) if elsewhere
-	delete(position: LinkedList.Position = 'end'): void {
+	delete(index: number = this.count - 1): void {
 		if (this.count === 0) return;
 
-		if (this.count === 1) {
-			this.head = null;
-			this.tail = null;
-		} else {
-			if (position === 'start') {
-				this.head = this.head!.next;
-			} else {
-				this.tail!.prev!.next = null;
+		if (index <= 0) {
+			this.head = this.head!.next;
+		} else if (index >= this.count - 1) {
+			const prev = this.tail!.prev;
 
-				this.tail = this.tail!.prev;
+			if (prev !== null) {
+				prev.next = null;
+			} else {
+				this.head = null;
 			}
+			this.tail = prev;
+		} else {
+			let current = this.head;
+
+			for (let i = 0; i < index; i++) {
+				current = current!.next;
+			}
+
+			const prev = current?.prev ?? null;
+			const next = current?.next ?? null;
+
+			console.log({ current, next, prev });
+
+			if (prev !== null) prev!.next = next;
+			if (next !== null) next!.prev = prev;
 		}
+
+		// if (this.count === 1) {
+		// 	this.head = null;
+		// 	this.tail = null;
+		// } else {
+		// 	if (position === 'start') {
+		// 		this.head = this.head!.next;
+		// 	} else {
+		// 		this.tail!.prev!.next = null;
+
+		// 		this.tail = this.tail!.prev;
+		// 	}
+		// }
 
 		this.count -= 1;
 	}
 
 	// O(n)
-	find(filterFunction: LinkedList.FilterFunction<T>): T | undefined {
+	find(findFunction: LinkedList.FindFunction<T>): T | undefined {
 		if (this.count === 0) return;
 
 		for (let node = this.head; node != null; node = node.next) {
-			if (filterFunction(node.data)) return node.data;
+			if (findFunction(node.data)) return node.data;
 		}
 	}
 
@@ -158,7 +185,7 @@ export class LinkedList<T> {
 }
 
 export namespace LinkedList {
-	export type Position = 'start' | 'end';
+	export type FindFunction<T> = (data: T) => boolean;
 	export type FilterFunction<T> = (data: T) => boolean;
 	export type MapFunction<T, U> = (data: T) => U;
 }

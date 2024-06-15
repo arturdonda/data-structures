@@ -7,7 +7,7 @@ messageStack.push('Second message!');
 messageStack.push('Last message!');
 
 while (messageStack.isEmpty() === false) {
-	console.log('size: ', messageStack.size);
+	console.log('length: ', messageStack.length);
 
 	const message = messageStack.pop();
 

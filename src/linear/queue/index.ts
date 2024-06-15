@@ -7,7 +7,7 @@ messageQueue.enqueue('Second message!');
 messageQueue.enqueue('Last message!');
 
 while (messageQueue.isEmpty() === false) {
-	console.log('size: ', messageQueue.size);
+	console.log('length: ', messageQueue.length);
 
 	const message = messageQueue.dequeue();
 

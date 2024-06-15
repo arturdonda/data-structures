@@ -9,26 +9,26 @@ export class Queue<T> implements QueueProtocol<T> {
 	}
 
 	enqueue(item: T): void {
-		this.data.insert(item, 'end');
+		this.data.insert(item);
 	}
 
 	dequeue(): T | undefined {
 		const head = this.peek();
 
-		this.data.delete('start');
+		this.data.delete(0);
 
 		return head;
 	}
 
 	peek(): T | undefined {
-		return this.data.peek('start');
+		return this.data.get(0);
 	}
 
-	get size(): number {
-		return this.data.size;
+	get length(): number {
+		return this.data.length;
 	}
 
 	isEmpty(): boolean {
-		return this.size === 0;
+		return this.length === 0;
 	}
 }

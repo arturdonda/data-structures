@@ -2,6 +2,6 @@ export interface StackProtocol<T> {
 	push: (item: T) => void;
 	pop: () => T | undefined;
 	peek: () => T | undefined;
-	size: number;
+	length: number;
 	isEmpty: () => boolean;
 }

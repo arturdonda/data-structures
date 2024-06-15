@@ -9,26 +9,26 @@ export class Stack<T> implements StackProtocol<T> {
 	}
 
 	push(item: T): void {
-		this.data.insert(item, 'end');
+		this.data.insert(item);
 	}
 
 	pop(): T | undefined {
-		const tail = this.data.peek('end');
+		const tail = this.peek();
 
-		this.data.delete('end');
+		this.data.delete();
 
 		return tail;
 	}
 
 	peek(): T | undefined {
-		return this.data.peek('end');
+		return this.data.get(this.data.length - 1);
 	}
 
-	get size(): number {
-		return this.data.size;
+	get length(): number {
+		return this.data.length;
 	}
 
 	isEmpty(): boolean {
-		return this.size === 0;
+		return this.length === 0;
 	}
 }
