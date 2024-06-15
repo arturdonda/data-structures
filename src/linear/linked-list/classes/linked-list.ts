@@ -1,52 +1,86 @@
-import { LinkedListProtocol, NodeProtocol } from '../interfaces';
-import { LinkedNode } from './node';
+import { DoublyLinkedListNode } from './node';
 
-export class LinkedList<T> implements LinkedListProtocol<T> {
-	private head: NodeProtocol<T> | null = null;
-	private tail: NodeProtocol<T> | null = null;
-	private length: number = 0;
+export class LinkedList<T> {
+	private head: DoublyLinkedListNode<T> | null = null;
+	private tail: DoublyLinkedListNode<T> | null = null;
+	private count: number = 0;
 
 	constructor(...initialData: T[]) {
-		initialData.forEach(data => this.insert(data, 'end'));
+		initialData.forEach(data => this.insert(data));
 	}
 
-	get size(): number {
-		return this.length;
+	get length(): number {
+		return this.count;
 	}
 
-	peek(position?: LinkedListProtocol.Position | undefined): T | undefined {
-		if (this.length === 0) return;
+	// O(1) if head or tail and O(n) if elsewhere
+	get(index: number): T | undefined {
+		if (index < 0 || index > this.count - 1) return undefined;
+		if (index === 0) return this.head!.data;
+		if (index === this.count - 1) return this.tail!.data;
 
-		return (position === 'end' ? this.tail : this.head)!.data;
+		let current = this.head;
+		for (let i = 0; i < index; i++) {
+			current = current!.next;
+		}
+
+		return current!.data;
 	}
 
-	insert(data: T, position: LinkedListProtocol.Position = 'end'): void {
-		const newNode = new LinkedNode(data);
+	// O(n)
+	indexOf(filterFunction: LinkedList.FilterFunction<T>): number {
+		let index = -1;
 
-		if (this.length === 0) {
-			this.head = newNode;
-			this.tail = newNode;
+		for (let node = this.head; node !== null; node = node.next) {
+			index++;
+
+			if (filterFunction(node.data)) return index;
+		}
+
+		return -1;
+	}
+
+	// O(1) if head or tail and O(n) if elsewhere
+	insert(data: T, index?: number): void {
+		const node = new DoublyLinkedListNode(data);
+
+		if (this.count === 0) {
+			this.head = node;
+			this.tail = node;
 		} else {
-			if (position === 'start') {
-				newNode.next = this.head;
-				this.head!.prev = newNode;
-
-				this.head = newNode;
+			if (index === undefined || index >= this.count - 1) {
+				this.tail!.next = node;
+				node.prev = this.tail;
+				this.tail = node;
+			} else if (index <= 0) {
+				node.next = this.head!;
+				this.head!.prev = node;
+				this.head = node;
 			} else {
-				newNode.prev = this.tail;
-				this.tail!.next = newNode;
+				let current = this.head;
 
-				this.tail = newNode;
+				for (let i = 0; i < index - 1; i++) {
+					current = current!.next;
+				}
+
+				const next = current!.next;
+
+				current!.next = node;
+				node.prev = current;
+
+				node.next = next;
+				next!.prev = node;
 			}
 		}
 
-		this.length += 1;
+		this.count += 1;
 	}
 
-	delete(position: LinkedListProtocol.Position = 'end'): void {
-		if (this.length === 0) return;
+	// O(1) if head or tail and O(n) if elsewhere
+	delete(position: LinkedList.Position = 'end'): void {
+		if (this.count === 0) return;
 
-		if (this.length === 1) {
+		if (this.count === 1) {
 			this.head = null;
 			this.tail = null;
 		} else {
@@ -59,44 +93,37 @@ export class LinkedList<T> implements LinkedListProtocol<T> {
 			}
 		}
 
-		this.length -= 1;
+		this.count -= 1;
 	}
 
-	find(filterFunction: LinkedListProtocol.FilterFunction<T>): T | undefined {
-		if (this.length === 0) return;
+	// O(n)
+	find(filterFunction: LinkedList.FilterFunction<T>): T | undefined {
+		if (this.count === 0) return;
 
 		for (let node = this.head; node != null; node = node.next) {
 			if (filterFunction(node.data)) return node.data;
 		}
 	}
 
-	filter(filterFunction: LinkedListProtocol.FilterFunction<T>): LinkedListProtocol<T> {
-		if (this.length === 0) return this;
+	// O(n)
+	filter(filterFunction: LinkedList.FilterFunction<T>): LinkedList<T> {
+		const filteredLinkedList = new LinkedList<T>();
 
 		for (let node = this.head; node != null; node = node.next) {
-			if (filterFunction(node.data)) continue;
+			if (!filterFunction(node.data)) continue;
 
-			if (node.prev) {
-				node.prev.next = node.next;
-			}
-
-			if (node.next) {
-				node.next.prev = node.prev;
-			}
-
-			this.length -= 1;
+			filteredLinkedList.insert(node.data);
 		}
 
-		return this;
+		return filteredLinkedList;
 	}
 
-	map<U>(mapFunction: LinkedListProtocol.MapFunction<T, U>): LinkedListProtocol<U> {
+	// O(n)
+	map<U>(mapFunction: LinkedList.MapFunction<T, U>): LinkedList<U> {
 		const mappedLinkedList = new LinkedList<U>();
 
-		if (this.length > 0) {
-			for (let node = this.head; node !== null; node = node.next) {
-				mappedLinkedList.insert(mapFunction(node.data));
-			}
+		for (let node = this.head; node !== null; node = node.next) {
+			mappedLinkedList.insert(mapFunction(node.data));
 		}
 
 		return mappedLinkedList;
@@ -104,7 +131,7 @@ export class LinkedList<T> implements LinkedListProtocol<T> {
 
 	//#region Util
 	[Symbol.iterator]() {
-		let current: NodeProtocol<T> | null = this.head;
+		let current: DoublyLinkedListNode<T> | null = this.head;
 
 		return {
 			next: () => {
@@ -118,25 +145,20 @@ export class LinkedList<T> implements LinkedListProtocol<T> {
 		};
 	}
 
-	[Symbol.for('nodejs.util.inspect.custom')](depth: any, inspectOptions: any, inspect: any) {
-		return this.toString();
-	}
+	[Symbol.for('nodejs.util.inspect.custom')]() {
+		const data: DoublyLinkedListNode<T>[] = [];
 
-	private toString() {
-		function stringifyData({ data }: NodeProtocol<T>) {
-			return typeof data === 'object' ? JSON.stringify(data) : `${data}`;
+		for (let node = this.head; node !== null; node = node.next) {
+			data.push(node);
 		}
 
-		const result: string[] = [];
-
-		let current: NodeProtocol<T> | null = this.head;
-
-		while (current !== null) {
-			result.push(stringifyData(current));
-			current = current.next;
-		}
-
-		return result.join();
+		return data;
 	}
 	//#endregion Util
+}
+
+export namespace LinkedList {
+	export type Position = 'start' | 'end';
+	export type FilterFunction<T> = (data: T) => boolean;
+	export type MapFunction<T, U> = (data: T) => U;
 }
