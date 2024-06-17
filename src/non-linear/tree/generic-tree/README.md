@@ -18,8 +18,8 @@ A generic tree is a type of tree data structure where each node can have an **ar
 | --------- | ------- | ---------- |
 | Access    | O(n)    | O(n)       |
 | Search    | O(n)    | O(n)       |
-| Push      | O(1)    | O(1)       |
-| Pop       | O(1)    | O(1)       |
+| Insertion | O(1)    | O(1)       |
+| Deletion  | O(1)    | O(1)       |
 
 ## Use Cases
 
