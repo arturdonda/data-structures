@@ -30,12 +30,7 @@ A tree is a **hierarchical** data structure consisting of **nodes**, where **eac
 
 ## Time Complexity
 
-| Operation | Average  | Worst Case |
-| --------- | -------- | ---------- |
-| Access    | O(log n) | O(n)       |
-| Search    | O(log n) | O(n)       |
-| Push      | O(log n) | O(n)       |
-| Pop       | O(log n) | O(n)       |
+This section will be addressed in each tree variation file, as time complexity varies for each tree implementation.
 
 ## Use Cases
 
