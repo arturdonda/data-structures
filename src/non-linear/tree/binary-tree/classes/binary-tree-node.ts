@@ -11,58 +11,38 @@ export class BinaryTreeNode<T> {
 		this.data = data;
 	}
 
-	traverse(type: 'inOrder' | 'preOrder' | 'postOrder' | 'levelOrder' = 'inOrder') {
-		return BinaryTreeNode.traverse(this, type);
+	traverse(traversalType: BinaryTreeNode.TraversalTypes = 'inOrder'): T[] {
+		if (traversalType === 'levelOrder') return this.bfsTraversal();
+
+		return this.dfsTraversal(traversalType);
 	}
 
-	includes(findFunction: (data: T) => boolean) {
-		return BinaryTreeNode.includes(this, findFunction);
+	//#region Traversal
+	private bfsTraversal(): T[] {
+		const queue = new Queue<BinaryTreeNode<T>>();
+		const result: T[] = [];
+
+		queue.enqueue(this);
+
+		while (queue.isEmpty() === false) {
+			const current = queue.dequeue() as BinaryTreeNode<T>;
+
+			result.push(current.data);
+
+			if (current.left) queue.enqueue(current.left);
+			if (current.right) queue.enqueue(current.right);
+		}
+
+		return result;
 	}
 
-	sum(mapFunction: (data: T) => number) {
-		return BinaryTreeNode.sum(this, mapFunction);
-	}
-
-	min(mapFunction: (data: T) => number) {
-		return BinaryTreeNode.min(this, mapFunction);
-	}
-
-	max(mapFunction: (data: T) => number) {
-		return BinaryTreeNode.max(this, mapFunction);
-	}
-
-	maxPath(mapFunction: (data: T) => number) {
-		return BinaryTreeNode.maxPath(this, mapFunction);
-	}
-
-	allPaths() {
-		return BinaryTreeNode.allPaths(this);
-	}
-
-	allLeaves() {
-		return BinaryTreeNode.allLeaves(this);
-	}
-
-	invert() {
-		return BinaryTreeNode.invert(this);
-	}
-
-	//#region Static Methods
-	//#region Traverse
-	static traverse<T>(node: BinaryTreeNode<T> | null, type: 'inOrder' | 'preOrder' | 'postOrder' | 'levelOrder' = 'inOrder') {
-		if (type === 'levelOrder') return BinaryTreeNode.breadthFirstTraversal(node);
-
-		return BinaryTreeNode.depthFirstTraversal(node, type);
-	}
-
-	// Depth First - Iterative Approach
-	private static depthFirstTraversal<T>(node: BinaryTreeNode<T> | null, type: 'inOrder' | 'preOrder' | 'postOrder') {
+	private dfsTraversal(dfsTraversalType: BinaryTreeNode.DfsTraversalTypes): T[] {
 		const result: T[] = [];
 		const stack = new Stack<BinaryTreeNode<T>>();
 
-		switch (type) {
+		switch (dfsTraversalType) {
 			case 'inOrder': {
-				let current = node;
+				let current: BinaryTreeNode<T> | null = this;
 
 				while (current !== null || stack.isEmpty() === false) {
 					while (current !== null) {
@@ -79,7 +59,7 @@ export class BinaryTreeNode<T> {
 				break;
 			}
 			case 'preOrder': {
-				if (node !== null) stack.push(node);
+				stack.push(this);
 
 				while (stack.isEmpty() === false) {
 					const current = stack.pop() as BinaryTreeNode<T>;
@@ -92,7 +72,7 @@ export class BinaryTreeNode<T> {
 				break;
 			}
 			case 'postOrder': {
-				if (node !== null) stack.push(node);
+				stack.push(this);
 
 				while (stack.isEmpty() === false) {
 					const current = stack.pop() as BinaryTreeNode<T>;
@@ -108,49 +88,12 @@ export class BinaryTreeNode<T> {
 
 		return result;
 	}
+	//#endregion Traversal
 
-	// Depth First - Recursive Approach
-	// private static depthFirstTraversal<T>(node: BinaryTreeNode<T> | null, type: 'inOrder' | 'preOrder' | 'postOrder', result: T[] = []): T[] {
-	// 	if (node === null) return [];
-
-	// 	const left = this.depthFirstTraversal(node.left, type, result);
-	// 	const right = this.depthFirstTraversal(node.right, type, result);
-
-	// 	switch (type) {
-	// 		case 'preOrder': // Root -> Left -> Right
-	// 			return [node.data, ...left, ...right];
-
-	// 		case 'inOrder': // Left -> Root -> Right
-	// 			return [...left, node.data, ...right];
-
-	// 		case 'postOrder': // Left -> Right -> Root
-	// 			return [...left, ...right, node.data];
-	// 	}
-	// }
-
-	private static breadthFirstTraversal<T>(node: BinaryTreeNode<T> | null) {
-		const queue = new Queue<BinaryTreeNode<T>>();
-		const result: T[] = [];
-
-		if (node !== null) queue.enqueue(node);
-
-		while (queue.isEmpty() === false) {
-			const current = queue.dequeue() as BinaryTreeNode<T>;
-
-			result.push(current.data);
-
-			if (current.left) queue.enqueue(current.left);
-			if (current.right) queue.enqueue(current.right);
-		}
-
-		return result;
-	}
-	//#endregion Traverse
-
-	static includes<T>(node: BinaryTreeNode<T> | null, findFunction: (data: T) => boolean): boolean {
+	includes(findFunction: (data: T) => boolean): boolean {
 		const stack = new Stack<BinaryTreeNode<T>>();
 
-		if (node !== null) stack.push(node);
+		stack.push(this);
 
 		while (stack.isEmpty() === false) {
 			const current = stack.pop() as BinaryTreeNode<T>;
@@ -164,11 +107,11 @@ export class BinaryTreeNode<T> {
 		return false;
 	}
 
-	static sum<T>(node: BinaryTreeNode<T> | null, mapFunction: (data: T) => number): number {
+	sum(mapFunction: (data: T) => number): number {
 		const stack = new Stack<BinaryTreeNode<T>>();
 		let sum = 0;
 
-		if (node !== null) stack.push(node);
+		stack.push(this);
 
 		while (stack.isEmpty() === false) {
 			const current = stack.pop() as BinaryTreeNode<T>;
@@ -182,11 +125,11 @@ export class BinaryTreeNode<T> {
 		return sum;
 	}
 
-	static min<T>(node: BinaryTreeNode<T> | null, mapFunction: (data: T) => number): number {
+	min(mapFunction: (data: T) => number): number {
 		const stack = new Stack<BinaryTreeNode<T>>();
 		let min = Infinity;
 
-		if (node !== null) stack.push(node);
+		stack.push(this);
 
 		while (stack.isEmpty() === false) {
 			const current = stack.pop() as BinaryTreeNode<T>;
@@ -200,11 +143,11 @@ export class BinaryTreeNode<T> {
 		return min;
 	}
 
-	static max<T>(node: BinaryTreeNode<T> | null, mapFunction: (data: T) => number): number {
+	max(mapFunction: (data: T) => number): number {
 		const stack = new Stack<BinaryTreeNode<T>>();
 		let max = -Infinity;
 
-		if (node !== null) stack.push(node);
+		stack.push(this);
 
 		while (stack.isEmpty() === false) {
 			const current = stack.pop() as BinaryTreeNode<T>;
@@ -218,36 +161,30 @@ export class BinaryTreeNode<T> {
 		return max;
 	}
 
-	// Max path (max root to leaf sum)
-	static maxPath<T>(node: BinaryTreeNode<T> | null, mapFunction: (data: T) => number): number {
-		if (node === null) return 0;
+	maxPath(mapFunction: (data: T) => number): number {
+		const left = this.left ? this.left.maxPath(mapFunction) : 0;
+		const right = this.right ? this.right.maxPath(mapFunction) : 0;
 
-		const left = this.maxPath(node.left, mapFunction);
-		const right = this.maxPath(node.right, mapFunction);
-
-		return mapFunction(node.data) + Math.max(left, right);
+		return mapFunction(this.data) + Math.max(left, right);
 	}
 
-	// All paths
-	static allPaths<T>(node: BinaryTreeNode<T> | null, path: T[] = []): T[][] {
-		if (node === null) return [path];
+	allPaths(path: T[] = []): T[][] {
+		path.push(this.data);
 
-		path.push(node.data);
+		if (this.left === null && this.right === null) return [path];
 
-		if (node.left === null && node.right === null) return [path];
-
-		const left = node.left ? BinaryTreeNode.allPaths(node.left, path.slice()) : [];
-		const right = node.right ? BinaryTreeNode.allPaths(node.right, path.slice()) : [];
+		const left = this.left ? this.left.allPaths(path.slice()) : [];
+		const right = this.right ? this.right.allPaths(path.slice()) : [];
 
 		return [...left, ...right];
 	}
 
-	static allLeaves<T>(node: BinaryTreeNode<T> | null): T[] {
+	allLeaves(): T[] {
 		const leaves: T[] = [];
 
 		const stack = new Stack<BinaryTreeNode<T>>();
 
-		if (node !== null) stack.push(node);
+		stack.push(this);
 
 		while (stack.isEmpty() === false) {
 			const current = stack.pop() as BinaryTreeNode<T>;
@@ -261,22 +198,25 @@ export class BinaryTreeNode<T> {
 		return leaves;
 	}
 
-	static invert<T>(node: BinaryTreeNode<T> | null): BinaryTreeNode<T> | null {
-		if (node === null) return node;
+	invert(): BinaryTreeNode<T> {
+		const left = this.left;
+		const right = this.right;
 
-		const left = node.left;
-		const right = node.right;
+		this.left = right === null ? null : right.invert();
+		this.right = left === null ? null : left.invert();
 
-		node.left = BinaryTreeNode.invert(right);
-		node.right = BinaryTreeNode.invert(left);
-
-		return node;
+		return this;
 	}
-	//#endregion Static Methods
 
 	//#region Print
 	[Symbol.for('nodejs.util.inspect.custom')]() {
 		return { data: this.data, left: this.left, right: this.right };
 	}
 	//#endregion Print
+}
+
+export namespace BinaryTreeNode {
+	export type DfsTraversalTypes = 'inOrder' | 'preOrder' | 'postOrder';
+	export type BfsTraversalTypes = 'levelOrder';
+	export type TraversalTypes = DfsTraversalTypes | BfsTraversalTypes;
 }
