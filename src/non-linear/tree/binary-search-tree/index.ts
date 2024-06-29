@@ -1,4 +1,4 @@
-import { BinarySearchTreeNode } from './classes/bst-node';
+import { BinarySearchTreeNode } from './classes';
 
 type User = { id: number; name: string };
 const bst = new BinarySearchTreeNode<User>({ id: 5, name: 'User 5' }, user => user.id);

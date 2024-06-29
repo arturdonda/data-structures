@@ -15,7 +15,7 @@ export class BinarySearchTreeNode<T> {
 		return this.getKey(this.data);
 	}
 
-	get min(): T {
+	min(): T {
 		let current: BinarySearchTreeNode<T> = this;
 
 		while (current.left !== null) {
@@ -25,7 +25,7 @@ export class BinarySearchTreeNode<T> {
 		return current.data;
 	}
 
-	get max(): T {
+	max(): T {
 		let current: BinarySearchTreeNode<T> = this;
 
 		while (current.right !== null) {
@@ -169,7 +169,7 @@ export class BinarySearchTreeNode<T> {
 			// 4) Node has both children -> update parent node to point to left-most child of right child (min value from right sub-tree)
 			// could also be right-most child of left child (max value from left sub-tree)
 
-			node.data = node.right!.min;
+			node.data = node.right!.min();
 			node.right = BinarySearchTreeNode.delete(node.right, node.key);
 		}
 
