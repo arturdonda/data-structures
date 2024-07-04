@@ -5,14 +5,14 @@ export class BinarySearchTreeNode<T> {
 	private left: BinarySearchTreeNode<T> | null;
 	private right: BinarySearchTreeNode<T> | null;
 
-	constructor(data: T, private readonly getKey: (data: T) => number) {
+	constructor(data: T, private readonly getKeyFunction: (data: T) => number) {
 		this.data = data;
 		this.left = null;
 		this.right = null;
 	}
 
-	get key() {
-		return this.getKey(this.data);
+	get key(): number {
+		return this.getKeyFunction(this.data);
 	}
 
 	min(): T {
@@ -35,14 +35,62 @@ export class BinarySearchTreeNode<T> {
 		return current.data;
 	}
 
-	traverse(traversalType: BinarySearchTreeNode.TraversalTypes = 'inOrder'): T[] {
-		if (traversalType === 'levelOrder') return this.bfsTraversal();
+	find(key: number): T | null {
+		if (key === this.key) return this.data;
 
-		return this.dfsTraversal(traversalType);
+		if (key < this.key) return this.left ? this.left.find(key) : this.left;
+
+		return this.right ? this.right.find(key) : this.right;
+	}
+
+	insert(data: T): void {
+		if (this.getKeyFunction(data) < this.key) {
+			if (this.left) return this.left.insert(data);
+
+			this.left = new BinarySearchTreeNode<T>(data, this.getKeyFunction);
+		} else {
+			if (this.right) return this.right.insert(data);
+
+			this.right = new BinarySearchTreeNode<T>(data, this.getKeyFunction);
+		}
+	}
+
+	static delete<T>(node: BinarySearchTreeNode<T> | null, key: number): BinarySearchTreeNode<T> | null {
+		if (node === null) return node;
+
+		if (key < node.key) {
+			// Key is less than node's key -> delete from and update left sub-tree\
+
+			node.left = BinarySearchTreeNode.delete(node.left, key);
+		} else if (key > node.key) {
+			// Key is greater than node's key -> delete from and update right sub-tree
+
+			node.right = BinarySearchTreeNode.delete(node.right, key);
+		} else {
+			// Key is equal to node's key -> delete node
+			// We have four possible scenarios:
+
+			// 1) Node has no children -> update parent node to point to null
+			if (node.left === null && node.right === null) return null;
+
+			// 2) Node has only left child -> update parent node to point to left child
+			if (node.left && node.right === null) return node.left;
+
+			// 3) Node has only right child -> update parent node to point to right child
+			if (node.left === null && node.right) return node.right;
+
+			// 4) Node has both children -> update parent node to point to left-most child of right child (min value from right sub-tree)
+			// could also be right-most child of left child (max value from left sub-tree)
+
+			node.data = node.right!.min();
+			node.right = BinarySearchTreeNode.delete(node.right, node.key);
+		}
+
+		return node;
 	}
 
 	//#region Traversal
-	private bfsTraversal(): T[] {
+	bfsTraversal(): T[] {
 		const queue = new Queue<BinarySearchTreeNode<T>>();
 		const result: T[] = [];
 
@@ -60,7 +108,7 @@ export class BinarySearchTreeNode<T> {
 		return result;
 	}
 
-	private dfsTraversal(dfsTraversalType: BinarySearchTreeNode.DfsTraversalTypes): T[] {
+	dfsTraversal(dfsTraversalType: BinarySearchTreeNode.DfsTraversalTypes): T[] {
 		const result: T[] = [];
 		const stack = new Stack<BinarySearchTreeNode<T>>();
 
@@ -114,75 +162,12 @@ export class BinarySearchTreeNode<T> {
 	}
 	//#endregion Traversal
 
-	find(key: number): T | null {
-		if (key === this.key) return this.data;
-
-		if (key < this.key) return this.left ? this.left.find(key) : this.left;
-
-		return this.right ? this.right.find(key) : this.right;
-	}
-
-	insert(data: T): void {
-		const key = this.getKey(data);
-
-		if (this.key === key) return;
-
-		if (key < this.key) {
-			if (this.left) return this.left.insert(data);
-
-			this.left = new BinarySearchTreeNode<T>(data, this.getKey);
-		} else {
-			if (this.right) return this.right.insert(data);
-
-			this.right = new BinarySearchTreeNode<T>(data, this.getKey);
-		}
-	}
-
-	delete(key: number): void {
-		BinarySearchTreeNode.delete(this, key);
-	}
-
-	private static delete<T>(node: BinarySearchTreeNode<T> | null, key: number): BinarySearchTreeNode<T> | null {
-		if (node === null) return node;
-
-		if (key < node.key) {
-			// Key is less than node's key -> delete from and update left sub-tree\
-
-			node.left = BinarySearchTreeNode.delete(node.left, key);
-		} else if (key > node.key) {
-			// Key is greater than node's key -> delete from and update right sub-tree
-
-			node.right = BinarySearchTreeNode.delete(node.right, key);
-		} else {
-			// Key is equal to node's key -> delete node
-			// We have four possible scenarios:
-
-			// 1) Node has no children -> update parent node to point to null
-			if (node.left === null && node.right === null) return null;
-
-			// 2) Node has only left child -> update parent node to point to left child
-			if (node.left && node.right === null) return node.left;
-
-			// 3) Node has only right child -> update parent node to point to right child
-			if (node.left === null && node.right) return node.right;
-
-			// 4) Node has both children -> update parent node to point to left-most child of right child (min value from right sub-tree)
-			// could also be right-most child of left child (max value from left sub-tree)
-
-			node.data = node.right!.min();
-			node.right = BinarySearchTreeNode.delete(node.right, node.key);
-		}
-
-		return node;
-	}
-
 	//#region Print
 	[Symbol.for('nodejs.util.inspect.custom')]() {
-		return { key: this.key, left: this.left, right: this.right };
+		return { data: this.data, left: this.left, right: this.right };
 	}
 	//#endregion Print
 }
-
 export namespace BinarySearchTreeNode {
 	export type DfsTraversalTypes = 'inOrder' | 'preOrder' | 'postOrder';
 	export type BfsTraversalTypes = 'levelOrder';

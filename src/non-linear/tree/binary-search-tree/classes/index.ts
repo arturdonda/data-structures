@@ -1,1 +1,1 @@
-export * from './bst-node';
+export * from './bst';
