@@ -12,23 +12,19 @@ export class BinarySearchTree<T> {
 	}
 
 	min(): T | null {
-		return this.root ? this.root.min() : this.root;
+		return BinarySearchTreeNode.min(this.root);
 	}
 
 	max(): T | null {
-		return this.root ? this.root.max() : this.root;
+		return BinarySearchTreeNode.max(this.root);
 	}
 
 	find(key: number): T | null {
-		return this.root ? this.root.find(key) : this.root;
+		return BinarySearchTreeNode.find(this.root, key);
 	}
 
 	insert(data: T): BinarySearchTree<T> {
-		if (this.root === null) {
-			this.root = new BinarySearchTreeNode<T>(data, this.getKeyFunction);
-		} else {
-			this.root.insert(data);
-		}
+		this.root = BinarySearchTreeNode.insert(this.root, data, this.getKeyFunction);
 
 		return this;
 	}

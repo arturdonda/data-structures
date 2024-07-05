@@ -15,8 +15,10 @@ export class BinarySearchTreeNode<T> {
 		return this.getKeyFunction(this.data);
 	}
 
-	min(): T {
-		let current: BinarySearchTreeNode<T> = this;
+	static min<T>(node: BinarySearchTreeNode<T> | null): T | null {
+		if (node === null) return null;
+
+		let current: BinarySearchTreeNode<T> = node;
 
 		while (current.left !== null) {
 			current = current.left;
@@ -25,8 +27,10 @@ export class BinarySearchTreeNode<T> {
 		return current.data;
 	}
 
-	max(): T {
-		let current: BinarySearchTreeNode<T> = this;
+	static max<T>(node: BinarySearchTreeNode<T> | null): T | null {
+		if (node === null) return null;
+
+		let current: BinarySearchTreeNode<T> = node;
 
 		while (current.right !== null) {
 			current = current.right;
@@ -35,24 +39,38 @@ export class BinarySearchTreeNode<T> {
 		return current.data;
 	}
 
-	find(key: number): T | null {
-		if (key === this.key) return this.data;
+	static find<T>(node: BinarySearchTreeNode<T> | null, key: number): T | null {
+		// Reached null node without finding corresponding key -> key not present!
+		if (node === null) return null;
 
-		if (key < this.key) return this.left ? this.left.find(key) : this.left;
+		// Found node with corresponding key -> return node
+		if (key === node.key) return node.data;
 
-		return this.right ? this.right.find(key) : this.right;
+		// Key is lesser than current node key -> search in left subtree
+		if (key < node.key) return BinarySearchTreeNode.find(node.left, key);
+
+		// Key is greater than current node key -> search in right subtree
+		return BinarySearchTreeNode.find(node.right, key);
 	}
 
-	insert(data: T): void {
-		if (this.getKeyFunction(data) < this.key) {
-			if (this.left) return this.left.insert(data);
+	static insert<T>(node: BinarySearchTreeNode<T> | null, data: T, getKeyFunction: (data: T) => number): BinarySearchTreeNode<T> {
+		const key = getKeyFunction(data);
 
-			this.left = new BinarySearchTreeNode<T>(data, this.getKeyFunction);
+		// current node is null -> insert here!
+		if (node === null) return new BinarySearchTreeNode<T>(data, getKeyFunction);
+
+		// key already present -> do not override (won't accept collisions)
+		if (key === node.key) return node;
+
+		if (key < node.key) {
+			// Key is lesser than curent node key -> insert in left subtree
+			node.left = BinarySearchTreeNode.insert(node.left, data, getKeyFunction);
 		} else {
-			if (this.right) return this.right.insert(data);
-
-			this.right = new BinarySearchTreeNode<T>(data, this.getKeyFunction);
+			// Key is greater than curent node key -> insert in right subtree
+			node.right = BinarySearchTreeNode.insert(node.right, data, getKeyFunction);
 		}
+
+		return node;
 	}
 
 	static delete<T>(node: BinarySearchTreeNode<T> | null, key: number): BinarySearchTreeNode<T> | null {
@@ -82,7 +100,7 @@ export class BinarySearchTreeNode<T> {
 			// 4) Node has both children -> update parent node to point to left-most child of right child (min value from right sub-tree)
 			// could also be right-most child of left child (max value from left sub-tree)
 
-			node.data = node.right!.min();
+			node.data = BinarySearchTreeNode.min(node.right)!;
 			node.right = BinarySearchTreeNode.delete(node.right, node.key);
 		}
 
