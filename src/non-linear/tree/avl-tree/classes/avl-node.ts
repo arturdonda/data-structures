@@ -56,6 +56,9 @@ export class AvlTreeNode<T> {
 
 		rightChild.left = node;
 
+		AvlTreeNode.updateHeight(node);
+		AvlTreeNode.updateHeight(rightChild);
+
 		return rightChild;
 	}
 
@@ -77,6 +80,9 @@ export class AvlTreeNode<T> {
 		node.left = leftChild.right;
 
 		leftChild.right = node;
+
+		AvlTreeNode.updateHeight(node);
+		AvlTreeNode.updateHeight(leftChild);
 
 		return leftChild;
 	}
