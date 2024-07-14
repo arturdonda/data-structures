@@ -22,12 +22,13 @@ export class MaxHeap<T> extends HeapProtocol<T> {
 			let leftChildIndex = this.getLeftChildIndex(currentIndex);
 			let rightChildIndex = this.getRightChildIndex(currentIndex);
 
-			if (leftChildIndex > this.lastIndex) break; // as rightChildIndex is bigger than leftChildIndex, if leftChildIndex is out of bound, then right child is as well
+			// as rightChildIndex is bigger than leftChildIndex, if leftChildIndex is out of bound, then right child is out of bound as well
+			if (leftChildIndex > this.lastIndex) break;
 
 			const childToSwap =
 				rightChildIndex > this.lastIndex
-					? leftChildIndex // if right child is out of boun, use left child
-					: // otherwise if both children are in range, use the one with biggest value
+					? leftChildIndex // if only right child is out of bound, use left child
+					: // otherwise if both children are in range, use the one with biggest priority
 					this.getPriorityFunction(this.heap[leftChildIndex]) > this.getPriorityFunction(this.heap[rightChildIndex])
 					? leftChildIndex
 					: rightChildIndex;

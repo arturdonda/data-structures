@@ -14,6 +14,10 @@ export abstract class HeapProtocol<T> {
 		this.lastIndex = -1;
 	}
 
+	get size(): number {
+		return this.lastIndex + 1;
+	}
+
 	isEmpty(): boolean {
 		return this.lastIndex === -1;
 	}
@@ -22,10 +26,6 @@ export abstract class HeapProtocol<T> {
 		if (this.isEmpty()) return null;
 
 		return this.heap[0];
-	}
-
-	get size(): number {
-		return this.lastIndex + 1;
 	}
 
 	insert(data: T): HeapProtocol<T> {
