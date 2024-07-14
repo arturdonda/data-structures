@@ -23,7 +23,7 @@ A Heap is a **complete binary tree data structure that satisfies the heap proper
 ## Common Operations
 
 - **Insert**: Adds a new element to the heap while maintaining the heap property.
-- **Delete**: Removes the root element (max or min) from the heap and rebalances it to maintain the heap property.
+- **Get**: Retrieves and removes the root element (max or min) from the heap and rebalances it to maintain the heap property.
 - **Peek**: Retrieves, but does not remove, the root element (max or min) of the heap.
 - **Heapify**: Converts an arbitrary array into a heap by adjusting the elements to satisfy the heap property.
 - **isEmpty**: Checks if the heap is empty.

@@ -18,6 +18,16 @@ export abstract class HeapProtocol<T> {
 		return this.lastIndex === -1;
 	}
 
+	peek(): T | null {
+		if (this.isEmpty()) return null;
+
+		return this.heap[0];
+	}
+
+	get size(): number {
+		return this.lastIndex + 1;
+	}
+
 	insert(data: T): HeapProtocol<T> {
 		// Adds new item to the last position
 		this.lastIndex++;
