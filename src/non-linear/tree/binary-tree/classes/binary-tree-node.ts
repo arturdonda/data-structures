@@ -218,8 +218,6 @@ export class BinaryTreeNode<T> {
 		while (!queue.isEmpty()) {
 			let current = queue.dequeue() ?? null;
 
-			// console.log({ queue, current, receivedNullValue });
-
 			if (receivedNullValue === true && current !== null) return false;
 
 			if (current === null) {
