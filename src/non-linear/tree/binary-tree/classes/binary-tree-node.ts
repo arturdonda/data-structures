@@ -208,6 +208,32 @@ export class BinaryTreeNode<T> {
 		return this;
 	}
 
+	//#region Helpers
+	static isComplete<T>(root: BinaryTreeNode<T>): boolean {
+		const queue = new Queue<BinaryTreeNode<T> | null>();
+		let receivedNullValue = false;
+
+		queue.enqueue(root);
+
+		while (!queue.isEmpty()) {
+			let current = queue.dequeue() ?? null;
+
+			// console.log({ queue, current, receivedNullValue });
+
+			if (receivedNullValue === true && current !== null) return false;
+
+			if (current === null) {
+				receivedNullValue = true;
+			} else {
+				queue.enqueue(current.left);
+				queue.enqueue(current.right);
+			}
+		}
+
+		return true;
+	}
+	//#endregion Helpers
+
 	//#region Print
 	[Symbol.for('nodejs.util.inspect.custom')]() {
 		return { data: this.data, left: this.left, right: this.right };
