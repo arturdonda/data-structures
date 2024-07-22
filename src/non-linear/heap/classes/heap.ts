@@ -1,11 +1,8 @@
-export abstract class HeapProtocol<T> {
+export class Heap<T> {
 	protected heap: T[];
 	protected lastIndex: number;
 
-	// Checks if the heap property is valid for given two elements
-	protected abstract isHeapPropertyValid(firstIndex: number, secondIndex: number): boolean;
-
-	constructor(protected readonly getPriorityFunction: (data: T) => number) {
+	constructor(protected readonly getPriorityFunction: (data: T) => number, protected readonly heapType: 'max' | 'min' = 'max') {
 		this.heap = [];
 		this.lastIndex = -1;
 	}
@@ -24,7 +21,7 @@ export abstract class HeapProtocol<T> {
 		return this.heap[0];
 	}
 
-	insert(data: T): HeapProtocol<T> {
+	insert(data: T): Heap<T> {
 		// Increments lastIndex
 		this.lastIndex++;
 
@@ -32,7 +29,7 @@ export abstract class HeapProtocol<T> {
 		this.heap[this.lastIndex] = data;
 
 		// Calls fixUpward method to sort and apply heap property from bottom to top (as the new element was inserted at the bottom)
-		this.fixUpward();
+		this.fixUpward(this.lastIndex);
 
 		return this;
 	}
@@ -50,22 +47,22 @@ export abstract class HeapProtocol<T> {
 		this.lastIndex--;
 		this.heap.length = this.lastIndex + 1;
 
-		// Calls fixDownward method to sort and apply heap property from top to bottom (as the last element is now position at the root)
+		// Calls fixDownward method to sort and apply heap property from top to bottom (as the last element is now wrongly positioned at the root)
 		this.fixDownward();
 
 		return root;
 	}
 
 	// Fixes the heap property from bottom to top - used on insert method
-	protected fixUpward(): void {
-		let currentIndex = this.lastIndex;
-		let parentIndex = this.getParentIndex(currentIndex);
+	protected fixUpward(lastIndex: number): void {
+		let currentIndex = lastIndex;
+		let parentIndex = Heap.getParentIndex(currentIndex);
 
 		while (parentIndex >= 0 && !this.isHeapPropertyValid(parentIndex, currentIndex)) {
 			this.swapPositions(parentIndex, currentIndex);
 
 			currentIndex = parentIndex;
-			parentIndex = this.getParentIndex(currentIndex);
+			parentIndex = Heap.getParentIndex(currentIndex);
 		}
 	}
 
@@ -76,8 +73,8 @@ export abstract class HeapProtocol<T> {
 		let currentIndex = 0;
 
 		while (currentIndex <= this.lastIndex) {
-			let leftChildIndex = this.getLeftChildIndex(currentIndex);
-			let rightChildIndex = this.getRightChildIndex(currentIndex);
+			let leftChildIndex = Heap.getLeftChildIndex(currentIndex);
+			let rightChildIndex = Heap.getRightChildIndex(currentIndex);
 
 			// as rightChildIndex is bigger than leftChildIndex, if leftChildIndex is out of bound, then right child is out of bound as well
 			if (leftChildIndex > this.lastIndex) break;
@@ -98,8 +95,20 @@ export abstract class HeapProtocol<T> {
 		}
 	}
 
+	//#region Static Methods
+	static heapify<T>(arr: T[]): Heap<T> {
+		// Throws because each concrete class must implement it's own version.
+		throw new Error('Not implemented yet!');
+	}
+	//#endregion Static Methods
+
 	//#region Helpers
-	// Swaps two elements
+	protected isHeapPropertyValid(firstIndex: number, secondIndex: number): boolean {
+		if (this.heapType === 'max') return this.getPriorityFunction(this.heap[firstIndex]) > this.getPriorityFunction(this.heap[secondIndex]);
+
+		return this.getPriorityFunction(this.heap[firstIndex]) < this.getPriorityFunction(this.heap[secondIndex]);
+	}
+
 	protected swapPositions(firstIndex: number, secondIndex: number) {
 		const temp: T = this.heap[firstIndex];
 
@@ -107,15 +116,15 @@ export abstract class HeapProtocol<T> {
 		this.heap[secondIndex] = temp;
 	}
 
-	protected getLeftChildIndex(index: number) {
+	protected static getLeftChildIndex(index: number) {
 		return 2 * index + 1;
 	}
 
-	protected getRightChildIndex(index: number) {
+	protected static getRightChildIndex(index: number) {
 		return 2 * index + 2;
 	}
 
-	protected getParentIndex(index: number) {
+	protected static getParentIndex(index: number) {
 		return Math.floor((index - 1) / 2);
 	}
 	//#endregion Helpers

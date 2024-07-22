@@ -1,13 +1,12 @@
-import { MaxHeap, MinHeap } from './classes';
-import { HeapProtocol } from './classes/heap-protocol';
+import { Heap } from './classes';
 
-function insert<T>(heap: HeapProtocol<T>, data: T) {
+function insert<T>(heap: Heap<T>, data: T) {
 	heap.insert(data);
 
 	console.log(`heap.insert(${data}):`, heap);
 }
 
-function get<T>(heap: HeapProtocol<T>) {
+function get<T>(heap: Heap<T>) {
 	console.log(`heap.get():`, heap.get());
 	console.log(`Resulting heap:`, heap);
 }
@@ -15,7 +14,7 @@ function get<T>(heap: HeapProtocol<T>) {
 function testHeap(type: 'min' | 'max') {
 	console.log(`----------     ${type.toUpperCase()} HEAP     ----------`);
 
-	const heap = new (type === 'min' ? MinHeap : MaxHeap)<number>(x => x);
+	const heap = new Heap<number>(x => x, type);
 
 	insert(heap, 5);
 	insert(heap, 2);
@@ -31,4 +30,4 @@ function testHeap(type: 'min' | 'max') {
 	get(heap);
 }
 
-testHeap('min');
+testHeap('max');
