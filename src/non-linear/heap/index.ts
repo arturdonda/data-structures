@@ -11,10 +11,10 @@ function get<T>(heap: Heap<T>) {
 	console.log(`Resulting heap:`, heap);
 }
 
-function testHeap(type: 'min' | 'max') {
-	console.log(`----------     ${type.toUpperCase()} HEAP     ----------`);
+function testHeap(heapType: Heap.Type) {
+	console.log(`----------     ${heapType.toUpperCase()} HEAP     ----------`);
 
-	const heap = new Heap<number>(x => x, type);
+	const heap = new Heap<number>({ getPriorityFunction: x => x, heapType });
 
 	insert(heap, 5);
 	insert(heap, 2);
@@ -30,4 +30,4 @@ function testHeap(type: 'min' | 'max') {
 	get(heap);
 }
 
-testHeap('max');
+testHeap(Heap.Type.min);

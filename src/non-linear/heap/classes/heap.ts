@@ -1,10 +1,14 @@
 export class Heap<T> {
-	protected heap: T[];
-	protected lastIndex: number;
+	private heap: T[];
+	private lastIndex: number;
+	private getPriorityFunction: Heap.GetPriorityFn<T>;
+	private heapType: Heap.Type;
 
-	constructor(protected readonly getPriorityFunction: (data: T) => number, protected readonly heapType: 'max' | 'min' = 'max') {
+	constructor({ getPriorityFunction, heapType }: Heap.ConstructorParams<T>) {
 		this.heap = [];
 		this.lastIndex = -1;
+		this.getPriorityFunction = getPriorityFunction;
+		this.heapType = heapType ?? Heap.Type.max;
 	}
 
 	get size(): number {
@@ -54,7 +58,7 @@ export class Heap<T> {
 	}
 
 	// Fixes the heap property from bottom to top - used on insert method
-	protected fixUpward(lastIndex: number): void {
+	private fixUpward(lastIndex: number): void {
 		let currentIndex = lastIndex;
 		let parentIndex = Heap.getParentIndex(currentIndex);
 
@@ -67,7 +71,7 @@ export class Heap<T> {
 	}
 
 	// Fixes the heap property from top to bottom - used on delete method
-	protected fixDownward(): void {
+	private fixDownward(): void {
 		if (this.isEmpty()) return;
 
 		let currentIndex = 0;
@@ -103,28 +107,28 @@ export class Heap<T> {
 	//#endregion Static Methods
 
 	//#region Helpers
-	protected isHeapPropertyValid(firstIndex: number, secondIndex: number): boolean {
+	private isHeapPropertyValid(firstIndex: number, secondIndex: number): boolean {
 		if (this.heapType === 'max') return this.getPriorityFunction(this.heap[firstIndex]) > this.getPriorityFunction(this.heap[secondIndex]);
 
 		return this.getPriorityFunction(this.heap[firstIndex]) < this.getPriorityFunction(this.heap[secondIndex]);
 	}
 
-	protected swapPositions(firstIndex: number, secondIndex: number) {
+	private swapPositions(firstIndex: number, secondIndex: number) {
 		const temp: T = this.heap[firstIndex];
 
 		this.heap[firstIndex] = this.heap[secondIndex];
 		this.heap[secondIndex] = temp;
 	}
 
-	protected static getLeftChildIndex(index: number) {
+	private static getLeftChildIndex(index: number) {
 		return 2 * index + 1;
 	}
 
-	protected static getRightChildIndex(index: number) {
+	private static getRightChildIndex(index: number) {
 		return 2 * index + 2;
 	}
 
-	protected static getParentIndex(index: number) {
+	private static getParentIndex(index: number) {
 		return Math.floor((index - 1) / 2);
 	}
 	//#endregion Helpers
@@ -134,4 +138,15 @@ export class Heap<T> {
 		return this.heap;
 	}
 	//#endregion Print
+}
+
+export namespace Heap {
+	export type ConstructorParams<T> = { getPriorityFunction: GetPriorityFn<T>; heapType?: Type };
+
+	export type GetPriorityFn<T> = (data: T) => number;
+
+	export enum Type {
+		max = 'max',
+		min = 'min',
+	}
 }
