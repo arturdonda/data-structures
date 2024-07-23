@@ -33,7 +33,7 @@ export class Heap<T> {
 		this.heap[this.lastIndex] = data;
 
 		// Calls fixUpward method to sort and apply heap property from bottom to top (as the new element was inserted at the bottom)
-		this.fixUpward(this.lastIndex);
+		this.fixUpward();
 
 		return this;
 	}
@@ -58,15 +58,17 @@ export class Heap<T> {
 	}
 
 	// Fixes the heap property from bottom to top - used on insert method
-	private fixUpward(lastIndex: number): void {
-		let currentIndex = lastIndex;
-		let parentIndex = Heap.getParentIndex(currentIndex);
+	private fixUpward(): void {
+		let currentIndex = this.lastIndex;
 
-		while (parentIndex >= 0 && !this.isHeapPropertyValid(parentIndex, currentIndex)) {
+		while (currentIndex >= 0) {
+			const parentIndex = Heap.getParentIndex(currentIndex);
+
+			if (parentIndex < 0 || this.isHeapPropertyValid(parentIndex, currentIndex)) break;
+
 			this.swapPositions(parentIndex, currentIndex);
 
 			currentIndex = parentIndex;
-			parentIndex = Heap.getParentIndex(currentIndex);
 		}
 	}
 
@@ -108,7 +110,7 @@ export class Heap<T> {
 
 	//#region Helpers
 	private isHeapPropertyValid(firstIndex: number, secondIndex: number): boolean {
-		if (this.heapType === 'max') return this.getPriorityFunction(this.heap[firstIndex]) > this.getPriorityFunction(this.heap[secondIndex]);
+		if (this.heapType === Heap.Type.max) return this.getPriorityFunction(this.heap[firstIndex]) > this.getPriorityFunction(this.heap[secondIndex]);
 
 		return this.getPriorityFunction(this.heap[firstIndex]) < this.getPriorityFunction(this.heap[secondIndex]);
 	}
