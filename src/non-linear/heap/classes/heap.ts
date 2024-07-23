@@ -68,9 +68,7 @@ export class Heap<T> {
 	}
 
 	// Fixes the heap property from top to bottom - used on delete method
-	private fixDownward(): void {
-		let currentIndex = 0;
-
+	private fixDownward(currentIndex: number = 0): void {
 		while (currentIndex <= this.lastIndex) {
 			let leftChildIndex = Heap.getLeftChildIndex(currentIndex);
 			let rightChildIndex = Heap.getRightChildIndex(currentIndex);
@@ -95,9 +93,15 @@ export class Heap<T> {
 	}
 
 	//#region Static Methods
-	static heapify<T>(arr: T[]): Heap<T> {
-		// Throws because each concrete class must implement it's own version.
-		throw new Error('Not implemented yet!');
+	static heapify<T>(arr: T[], params: Heap.ConstructorParams<T>): Heap<T> {
+		const heap = new Heap<T>(params);
+		heap.heap = arr;
+
+		for (let index = Heap.getParentIndex(heap.lastIndex); index >= 0; index--) {
+			heap.fixDownward(index);
+		}
+
+		return heap;
 	}
 	//#endregion Static Methods
 
