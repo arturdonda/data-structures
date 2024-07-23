@@ -1,22 +1,24 @@
 export class Heap<T> {
 	private heap: T[];
-	private lastIndex: number;
 	private getPriorityFunction: Heap.GetPriorityFn<T>;
 	private heapType: Heap.Type;
 
 	constructor({ getPriorityFunction, heapType }: Heap.ConstructorParams<T>) {
 		this.heap = [];
-		this.lastIndex = -1;
 		this.getPriorityFunction = getPriorityFunction;
 		this.heapType = heapType ?? Heap.Type.max;
 	}
 
 	get size(): number {
-		return this.lastIndex + 1;
+		return this.heap.length;
+	}
+
+	get lastIndex() {
+		return this.heap.length - 1;
 	}
 
 	isEmpty(): boolean {
-		return this.lastIndex === -1;
+		return this.heap.length === 0;
 	}
 
 	peek(): T | null {
@@ -26,11 +28,8 @@ export class Heap<T> {
 	}
 
 	insert(data: T): Heap<T> {
-		// Increments lastIndex
-		this.lastIndex++;
-
 		// Adds new item to the last position
-		this.heap[this.lastIndex] = data;
+		this.heap.push(data);
 
 		// Calls fixUpward method to sort and apply heap property from bottom to top (as the new element was inserted at the bottom)
 		this.fixUpward();
@@ -41,15 +40,11 @@ export class Heap<T> {
 	get(): T | null {
 		if (this.isEmpty()) return null;
 
-		// Get root
-		const root = this.heap[0];
-
 		// Swap root and last item
 		this.swapPositions(0, this.lastIndex);
 
 		// Remove last item (root) from heap
-		this.lastIndex--;
-		this.heap.length = this.lastIndex + 1;
+		const root = this.heap.pop()!;
 
 		// Calls fixDownward method to sort and apply heap property from top to bottom (as the last element is now wrongly positioned at the root)
 		this.fixDownward();
@@ -74,8 +69,6 @@ export class Heap<T> {
 
 	// Fixes the heap property from top to bottom - used on delete method
 	private fixDownward(): void {
-		if (this.isEmpty()) return;
-
 		let currentIndex = 0;
 
 		while (currentIndex <= this.lastIndex) {
