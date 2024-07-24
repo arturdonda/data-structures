@@ -13,10 +13,6 @@ export class Heap<T> {
 		return this.heap.length;
 	}
 
-	get lastIndex() {
-		return this.heap.length - 1;
-	}
-
 	isEmpty(): boolean {
 		return this.heap.length === 0;
 	}
@@ -31,8 +27,8 @@ export class Heap<T> {
 		// Adds new item to the last position
 		this.heap.push(data);
 
-		// Calls fixUpward method to sort and apply heap property from bottom to top (as the new element was inserted at the bottom)
-		this.fixUpward();
+		// Calls heapifyUp method to sort and apply heap property from bottom to top (as the new element was inserted at the bottom)
+		this.heapifyUp();
 
 		return this;
 	}
@@ -46,66 +42,28 @@ export class Heap<T> {
 		// Remove last item (root) from heap
 		const root = this.heap.pop()!;
 
-		// Calls fixDownward method to sort and apply heap property from top to bottom (as the last element is now wrongly positioned at the root)
-		this.fixDownward();
+		// Calls heapifyDown method to sort and apply heap property from top to bottom (as the last element is now wrongly positioned at the root)
+		this.heapifyDown();
 
 		return root;
 	}
 
-	// Fixes the heap property from bottom to top - used on insert method
-	private fixUpward(): void {
-		let currentIndex = this.lastIndex;
-
-		while (currentIndex >= 0) {
-			const parentIndex = Heap.getParentIndex(currentIndex);
-
-			if (parentIndex < 0 || this.isHeapPropertyValid(parentIndex, currentIndex)) break;
-
-			this.swapPositions(parentIndex, currentIndex);
-
-			currentIndex = parentIndex;
-		}
-	}
-
-	// Fixes the heap property from top to bottom - used on delete method
-	private fixDownward(currentIndex: number = 0): void {
-		while (currentIndex <= this.lastIndex) {
-			let leftChildIndex = Heap.getLeftChildIndex(currentIndex);
-			let rightChildIndex = Heap.getRightChildIndex(currentIndex);
-
-			// as rightChildIndex is bigger than leftChildIndex, if leftChildIndex is out of bound, then right child is out of bound as well
-			if (leftChildIndex > this.lastIndex) break;
-
-			const childToSwap =
-				// if only right child is out of bound
-				rightChildIndex > this.lastIndex
-					? leftChildIndex // then use left child
-					: // otherwise, if both children are in range, use the one with highest priority
-					this.isHeapPropertyValid(leftChildIndex, rightChildIndex)
-					? leftChildIndex
-					: rightChildIndex;
-
-			if (this.isHeapPropertyValid(currentIndex, childToSwap)) break;
-
-			this.swapPositions(currentIndex, childToSwap);
-			currentIndex = childToSwap;
-		}
-	}
-
-	//#region Static Methods
 	static heapify<T>(arr: T[], params: Heap.ConstructorParams<T>): Heap<T> {
 		const heap = new Heap<T>(params);
 		heap.heap = arr;
 
 		for (let index = Heap.getParentIndex(heap.lastIndex); index >= 0; index--) {
-			heap.fixDownward(index);
+			heap.heapifyDown(index);
 		}
 
 		return heap;
 	}
-	//#endregion Static Methods
 
 	//#region Helpers
+	private get lastIndex() {
+		return this.heap.length - 1;
+	}
+
 	private isHeapPropertyValid(firstIndex: number, secondIndex: number): boolean {
 		if (this.heapType === Heap.Type.max) return this.getPriorityFunction(this.heap[firstIndex]) > this.getPriorityFunction(this.heap[secondIndex]);
 
@@ -129,6 +87,46 @@ export class Heap<T> {
 
 	private static getParentIndex(index: number) {
 		return Math.floor((index - 1) / 2);
+	}
+
+	// Fixes the heap property from bottom to top - used on insert method
+	private heapifyUp(): void {
+		let currentIndex = this.lastIndex;
+
+		while (currentIndex >= 0) {
+			const parentIndex = Heap.getParentIndex(currentIndex);
+
+			if (parentIndex < 0 || this.isHeapPropertyValid(parentIndex, currentIndex)) break;
+
+			this.swapPositions(parentIndex, currentIndex);
+
+			currentIndex = parentIndex;
+		}
+	}
+
+	// Fixes the heap property from top to bottom - used on delete method and on heapSort algorithm (static heapify)
+	private heapifyDown(currentIndex: number = 0): void {
+		while (currentIndex <= this.lastIndex) {
+			let leftChildIndex = Heap.getLeftChildIndex(currentIndex);
+			let rightChildIndex = Heap.getRightChildIndex(currentIndex);
+
+			// as rightChildIndex is bigger than leftChildIndex, if leftChildIndex is out of bound, then right child is out of bound as well
+			if (leftChildIndex > this.lastIndex) break;
+
+			const childToSwap =
+				// if only right child is out of bound
+				rightChildIndex > this.lastIndex
+					? leftChildIndex // then use left child
+					: // otherwise, if both children are in range, use the one with highest priority
+					this.isHeapPropertyValid(leftChildIndex, rightChildIndex)
+					? leftChildIndex
+					: rightChildIndex;
+
+			if (this.isHeapPropertyValid(currentIndex, childToSwap)) break;
+
+			this.swapPositions(currentIndex, childToSwap);
+			currentIndex = childToSwap;
+		}
 	}
 	//#endregion Helpers
 
