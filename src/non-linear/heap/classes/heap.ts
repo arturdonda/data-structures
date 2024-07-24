@@ -13,12 +13,12 @@ export class Heap<T> {
 		return this.heap.length;
 	}
 
-	isEmpty(): boolean {
+	get isEmpty(): boolean {
 		return this.heap.length === 0;
 	}
 
 	peek(): T | null {
-		if (this.isEmpty()) return null;
+		if (this.isEmpty) return null;
 
 		return this.heap[0];
 	}
@@ -34,7 +34,7 @@ export class Heap<T> {
 	}
 
 	get(): T | null {
-		if (this.isEmpty()) return null;
+		if (this.isEmpty) return null;
 
 		// Swap root and last item
 		this.swapPositions(0, this.lastIndex);
