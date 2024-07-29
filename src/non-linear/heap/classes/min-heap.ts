@@ -1,7 +1,11 @@
 import { Heap } from './heap';
 
 export class MinHeap<T> extends Heap<T> {
-	constructor(getPriorityFunction: Heap.ConstructorParams<T>['getPriorityFunction']) {
-		super({ getPriorityFunction, heapType: Heap.Type.min });
+	constructor(getPriorityFunction: Heap.GetPriorityFn<T>) {
+		super(getPriorityFunction, Heap.Type.min);
+	}
+
+	static heapify<T>(arr: T[], getPriorityFunction: Heap.GetPriorityFn<T>): Heap<T> {
+		return super.heapify(arr, getPriorityFunction, Heap.Type.min);
 	}
 }

@@ -1,33 +1,37 @@
 import { Heap } from './classes';
 
-function insert<T>(heap: Heap<T>, data: T) {
-	heap.insert(data);
+function testHeap(heapType: Heap.Type, initialData?: number[]) {
+	console.log('\n', `----------     ${heapType.toUpperCase()} HEAP${initialData ? 'IFY' : ''}     ----------`, '\n');
 
-	console.log(`heap.insert(${data}):`, heap);
+	const heap = (function createHeap() {
+		if (initialData) {
+			console.log('Initial Data = ', initialData, '\n');
+
+			return Heap.heapify(initialData, n => n, heapType);
+		}
+
+		const heap = new Heap<number>(n => n, heapType);
+
+		for (let i = 0; i < 5; i++) {
+			const value = Math.floor(Math.random() * 100);
+
+			heap.insert(value);
+
+			console.log(`heap.insert(${value})`, ' | Heap = ', heap);
+		}
+
+		return heap;
+	})();
+
+	while (heap.isEmpty === false) {
+		const value = heap.get();
+		console.log('heap.get() = ', value, ' | Heap = ', heap);
+	}
 }
 
-function get<T>(heap: Heap<T>) {
-	console.log(`heap.get():`, heap.get());
-	console.log(`Resulting heap:`, heap);
-}
+const generateArray = (length: number) => Array.from({ length }, () => Math.floor(Math.random() * 100));
 
-function testHeap(heapType: Heap.Type) {
-	console.log(`----------     ${heapType.toUpperCase()} HEAP     ----------`);
-
-	const heap = new Heap<number>({ getPriorityFunction: x => x, heapType });
-
-	insert(heap, 5);
-	insert(heap, 2);
-	insert(heap, 4);
-	insert(heap, 8);
-	insert(heap, 6);
-
-	get(heap);
-	get(heap);
-	get(heap);
-	get(heap);
-	get(heap);
-	get(heap);
-}
-
+testHeap(Heap.Type.max);
 testHeap(Heap.Type.min);
+testHeap(Heap.Type.max, generateArray(5));
+testHeap(Heap.Type.min, generateArray(5));

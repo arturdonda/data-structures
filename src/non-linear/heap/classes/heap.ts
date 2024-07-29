@@ -3,10 +3,10 @@ export class Heap<T> {
 	private getPriorityFunction: Heap.GetPriorityFn<T>;
 	private heapType: Heap.Type;
 
-	constructor({ getPriorityFunction, heapType }: Heap.ConstructorParams<T>) {
+	constructor(getPriorityFunction: Heap.GetPriorityFn<T>, heapType: Heap.Type = Heap.Type.max) {
 		this.heap = [];
 		this.getPriorityFunction = getPriorityFunction;
-		this.heapType = heapType ?? Heap.Type.max;
+		this.heapType = heapType;
 	}
 
 	get size(): number {
@@ -48,8 +48,8 @@ export class Heap<T> {
 		return root;
 	}
 
-	static heapify<T>(arr: T[], params: Heap.ConstructorParams<T>): Heap<T> {
-		const heap = new Heap<T>(params);
+	static heapify<T>(arr: T[], getPriorityFunction: Heap.GetPriorityFn<T>, heapType?: Heap.Type): Heap<T> {
+		const heap = new Heap<T>(getPriorityFunction, heapType);
 		heap.heap = arr;
 
 		for (let index = Heap.getParentIndex(heap.lastIndex); index >= 0; index--) {
@@ -138,8 +138,6 @@ export class Heap<T> {
 }
 
 export namespace Heap {
-	export type ConstructorParams<T> = { getPriorityFunction: GetPriorityFn<T>; heapType?: Type };
-
 	export type GetPriorityFn<T> = (data: T) => number;
 
 	export enum Type {
