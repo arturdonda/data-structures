@@ -1,6 +1,6 @@
 {
 	"name": "data-structures",
-	"version": "1.0.53",
+	"version": "1.0.54",
 	"description": "This repository is dedicated to documenting my studies on Data Structures and Algorithms.",
 	"main": "",
 	"scripts": {
@@ -9,6 +9,7 @@
 		"postcommit": "git push"
 	},
 	"devDependencies": {
+		"@tsconfig/node20": "^20.1.4",
 		"@types/node": "^20.12.7",
 		"typescript": "^5.4.5"
 	}
