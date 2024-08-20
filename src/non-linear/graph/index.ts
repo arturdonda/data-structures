@@ -1,6 +1,6 @@
 import { Graph } from './classes';
 
-const graph = new Graph({ weighted: false });
+const graph = new Graph({ directed: true, weighted: false });
 
 function printGraphData(title: string, graph: Graph) {
 	console.log('\n', `-----   ${title}   -----`);
@@ -24,6 +24,25 @@ graph.addEdge('b', 'd');
 graph.addEdge('c', 'f');
 graph.addEdge('e', 'b');
 
+/*
+    Constructed Graph is:
+
+    a   →   c   →   f
+    ↓   ↗
+    b   ←   e
+    ↓
+    d
+
+    {
+        a: [ 'b', 'c' ],
+        b: [ 'c', 'd' ],
+        c: [ 'f' ],
+        d: [],
+        e: [ 'b' ],
+        f: []
+    }
+*/
+
 printGraphData('INITIAL GRAPH', graph);
 
 graph.removeEdge('c', 'f');
@@ -31,3 +50,22 @@ printGraphData('REMOVED EDGE (c, f)', graph);
 
 graph.removeNode('b');
 printGraphData('REMOVED NODE (b)', graph);
+
+const adjacencyList = {
+	a: ['b', 'c'],
+	b: ['c', 'd'],
+	c: ['f'],
+	d: [],
+	e: ['b'],
+	f: [],
+};
+
+printGraphData('GRAPH FROM ADJACENCY LIST', Graph.fromAdjacencyList(adjacencyList));
+
+const edgesList: [string, string][] = [
+	['a', 'b'],
+	['b', 'c'],
+	['c', 'a'],
+];
+
+printGraphData('GRAPH FROM EDGES LIST', Graph.fromArrayOfEdges(edgesList));

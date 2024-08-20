@@ -69,6 +69,60 @@ export class Graph {
 	}
 	//#endregion Edges
 
+	get(key: Graph.Key) {
+		const node = this.adjacencyList.get(key);
+
+		if (node === undefined) return node;
+
+		return [...node.entries()].map(([neighbourKey, neighbourWeight]) => ({ key: neighbourKey, weight: neighbourWeight }));
+	}
+
+	//#region Static Methods
+	static fromAdjacencyList(adjacencyList: Record<Graph.Key, Graph.Key[]>): Graph;
+	static fromAdjacencyList(adjacencyList: Record<Graph.Key, { key: Graph.Key; weight: number }[]>): Graph;
+	static fromAdjacencyList(adjacencyList: Record<Graph.Key, (Graph.Key | { key: Graph.Key; weight: number })[]>) {
+		console.log({
+			values: Object.values(adjacencyList),
+			find: Object.values(adjacencyList).find(x => x.length)?.[0],
+			typeof: typeof Object.values(adjacencyList).find(x => x.length)?.[0],
+			weighted: typeof Object.values(adjacencyList).find(x => x.length)?.[0] === 'object',
+		});
+
+		const graph = new Graph({ directed: true, weighted: typeof Object.values(adjacencyList).find(x => x.length)?.[0] === 'object' });
+
+		for (const [key, neighbours] of Object.entries(adjacencyList)) {
+			graph.addNode(key);
+
+			for (const neighbour of neighbours) {
+				if (typeof neighbour === 'object') {
+					graph.addNode(neighbour.key);
+					graph.addEdge(key, neighbour.key, neighbour.weight);
+				} else {
+					graph.addNode(neighbour);
+					graph.addEdge(key, neighbour);
+				}
+			}
+		}
+
+		return graph;
+	}
+
+	static fromArrayOfEdges(arr: [Graph.Key, Graph.Key][]): Graph;
+	static fromArrayOfEdges(arr: [Graph.Key, Graph.Key, number][]): Graph;
+	static fromArrayOfEdges(arr: ([Graph.Key, Graph.Key] | [Graph.Key, Graph.Key, number])[]): Graph {
+		const graph = new Graph({ directed: false, weighted: typeof arr[0][2] === 'number' });
+
+		for (const [nodeA, nodeB, weight] of arr) {
+			graph.addNode(nodeA);
+			graph.addNode(nodeB);
+
+			graph.addEdge(nodeA, nodeB, weight);
+		}
+
+		return graph;
+	}
+	//#endregion Static Methods
+
 	protected checkIfNodeExists(key: Graph.Key) {
 		if (this.adjacencyList.has(key)) return;
 
@@ -84,7 +138,7 @@ export class Graph {
 		const result: Record<Graph.Key, any[]> = {};
 
 		this.adjacencyList.forEach((edges, key, adjacencyList) => {
-			result[key] = this.isWeighted ? [...edges.entries()].map(([key, weight]) => ({ key, weight })) : [...edges.keys()];
+			result[key] = this.get(key)!.map(x => (this.isWeighted ? x : x.key));
 		});
 
 		return result;
