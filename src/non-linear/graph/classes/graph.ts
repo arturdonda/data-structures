@@ -74,7 +74,7 @@ export class Graph {
 
 		if (node === undefined) return node;
 
-		return [...node.entries()].map(([neighbourKey, neighbourWeight]) => ({ key: neighbourKey, weight: neighbourWeight }));
+		return [...node.entries()].map(([neighborKey, neighborWeight]) => ({ key: neighborKey, weight: neighborWeight }));
 	}
 
 	//#region Static Methods
@@ -90,16 +90,16 @@ export class Graph {
 
 		const graph = new Graph({ directed: true, weighted: typeof Object.values(adjacencyList).find(x => x.length)?.[0] === 'object' });
 
-		for (const [key, neighbours] of Object.entries(adjacencyList)) {
+		for (const [key, neighbors] of Object.entries(adjacencyList)) {
 			graph.addNode(key);
 
-			for (const neighbour of neighbours) {
-				if (typeof neighbour === 'object') {
-					graph.addNode(neighbour.key);
-					graph.addEdge(key, neighbour.key, neighbour.weight);
+			for (const neighbor of neighbors) {
+				if (typeof neighbor === 'object') {
+					graph.addNode(neighbor.key);
+					graph.addEdge(key, neighbor.key, neighbor.weight);
 				} else {
-					graph.addNode(neighbour);
-					graph.addEdge(key, neighbour);
+					graph.addNode(neighbor);
+					graph.addEdge(key, neighbor);
 				}
 			}
 		}
