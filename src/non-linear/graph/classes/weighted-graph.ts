@@ -1,5 +1,5 @@
-export class Graph {
-	protected adjacencyList: Map<string, Set<string>>;
+export class WeightedGraph {
+	protected adjacencyList: Map<string, Map<string, number>>;
 
 	constructor() {
 		this.adjacencyList = new Map();
@@ -27,7 +27,7 @@ export class Graph {
 	addNode(key: string) {
 		if (this.adjacencyList.has(key)) return;
 
-		this.adjacencyList.set(key, new Set());
+		this.adjacencyList.set(key, new Map());
 	}
 
 	removeNode(key: string) {
@@ -38,11 +38,11 @@ export class Graph {
 	//#endregion Nodes
 
 	//#region Edges
-	addEdge(from: string, to: string): void {
+	addEdge(from: string, to: string, weight: number): void {
 		this.checkIfNodeExists(from);
 		this.checkIfNodeExists(to);
 
-		this.adjacencyList.get(from)!.add(to);
+		this.adjacencyList.get(from)!.set(to, weight);
 	}
 
 	removeEdge(from: string, to: string) {
@@ -58,37 +58,37 @@ export class Graph {
 
 		if (node === undefined) return node;
 
-		return Array.from(node);
+		return Array.from(node).map(([key, weight]) => ({ key, weight }));
 	}
 
 	//#region Static Methods
-	static fromAdjacencyList(adjacencyList: Record<string, string[]>): Graph {
-		const graph = new Graph();
+	static fromAdjacencyList(adjacencyList: Record<string, { key: string; weight: number }[]>): WeightedGraph {
+		const weightedGraph = new WeightedGraph();
 
 		for (const [key, neighbors] of Object.entries(adjacencyList)) {
-			graph.addNode(key);
+			weightedGraph.addNode(key);
 
 			for (const neighbor of neighbors) {
-				graph.addNode(neighbor);
-				graph.addEdge(key, neighbor);
+				weightedGraph.addNode(neighbor.key);
+				weightedGraph.addEdge(key, neighbor.key, neighbor.weight);
 			}
 		}
 
-		return graph;
+		return weightedGraph;
 	}
 
-	static fromArrayOfEdges(arr: [string, string][]): Graph {
-		const graph = new Graph();
+	static fromArrayOfEdges(arr: [string, string, number][]): WeightedGraph {
+		const weightedGraph = new WeightedGraph();
 
-		for (const [nodeA, nodeB] of arr) {
-			graph.addNode(nodeA);
-			graph.addNode(nodeB);
+		for (const [nodeA, nodeB, weight] of arr) {
+			weightedGraph.addNode(nodeA);
+			weightedGraph.addNode(nodeB);
 
-			graph.addEdge(nodeA, nodeB);
-			graph.addEdge(nodeB, nodeA);
+			weightedGraph.addEdge(nodeA, nodeB, weight);
+			weightedGraph.addEdge(nodeB, nodeA, weight);
 		}
 
-		return graph;
+		return weightedGraph;
 	}
 	//#endregion Static Methods
 
@@ -104,7 +104,7 @@ export class Graph {
 	}
 
 	toJSON(): object {
-		const result: Record<string, string[]> = {};
+		const result: Record<string, any[]> = {};
 
 		this.adjacencyList.forEach((edges, key, adjacencyList) => {
 			result[key] = this.get(key)!;

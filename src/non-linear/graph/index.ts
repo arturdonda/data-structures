@@ -1,7 +1,5 @@
 import { Graph } from './classes';
 
-const graph = new Graph({ directed: true, weighted: false });
-
 function printGraphData(title: string, graph: Graph) {
 	console.log('\n', `-----   ${title}   -----`);
 	console.log('# of nodes:', graph.nodesCount);
@@ -9,6 +7,8 @@ function printGraphData(title: string, graph: Graph) {
 	console.log('Is Empty:', graph.isEmpty);
 	console.log('Graph:', graph);
 }
+
+const graph = new Graph();
 
 graph.addNode('a');
 graph.addNode('b');
